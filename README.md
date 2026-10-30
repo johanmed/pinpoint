@@ -1,5 +1,5 @@
 <div align="center">
-	<h1>GSurgeon: the genomic surgeon</h1>
+	<h1>Looking inside genomes and phenomes</h1>
 </div>
 
 ## What is Pinpoint?
