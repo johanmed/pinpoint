@@ -1,4 +1,4 @@
-"""Module with GeneNetwork SPARQL tools for GSurgeon"""
+"""Module with GeneNetwork SPARQL tools for Pinpoint"""
 
 import asyncio
 import concurrent.futures

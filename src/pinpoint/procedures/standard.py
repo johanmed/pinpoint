@@ -1,4 +1,4 @@
-"""Module with standard procedures (dspy modules) for GSurgeon"""
+"""Module with standard procedures (dspy modules) for Pinpoint"""
 
 import dspy
 from langchain_core.messages import BaseMessage

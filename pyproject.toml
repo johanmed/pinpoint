@@ -1,5 +1,5 @@
 [project]
-name = "gsurgeon"
+name = "pinpoint"
 version = "1.0.0"
 description = "A tool to dissect biology of model organisms using genomic information"
 authors = [
@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/johanmed/gsurgeon"
+Homepage = "https://github.com/johanmed/pinpoint"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

@@ -1,9 +1,9 @@
-"""Module with ReAct procedures (dspy programs) for GSurgeon"""
+"""Module with ReAct procedures (dspy programs) for Pinpoint"""
 
 import dspy
-from gsurgeon.tools.general import checker, reformulator, splitter
-from gsurgeon.tools.gn import make_sparql_tool
-from gsurgeon.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
+from pinpoint.tools.general import checker, reformulator, splitter
+from pinpoint.tools.gn import make_sparql_tool
+from pinpoint.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
 from langchain_core.messages import BaseMessage
 
 

@@ -2,13 +2,13 @@
 	<h1>GSurgeon: the genomic surgeon</h1>
 </div>
 
-## What is GSurgeon?
+## What is Pinpoint?
 
-**GSurgeon** is an LLM tool to dissect biology of model organisms through genomic information. It leverages LLM capabilities to send dynamic requests in natural language to genomic databases and extract any biological information.
+**Pinpoint** is an LLM tool to dissect biology of model organisms through genomic information. It leverages LLM capabilities to send dynamic requests in natural language to genomic databases and extract any biological information.
 
-## What questions can you ask GSurgeon?
+## What questions can you ask Pinpoint?
 
-**GSurgeon** has been tested on questions related to model organisms involving markers, genes and traits. A few examples with `anthropic/claude-opus-4-8`...
+**Pinpoint** has been tested on questions related to model organisms involving markers, genes and traits. A few examples with `anthropic/claude-opus-4-8`...
 
 1. Which genes on chromosome 1 of the mouse genome are related to inflammation and diabetes?
 ```
@@ -59,14 +59,14 @@ These are directly measured phenotypes, mostly from BXD mouse populations using 
 
 Queries in the realm of biology and genomics are all supported.
 
-## How to install and run GSurgeon?
+## How to install and run Pinpoint?
 
 #### 1. Get the source code
 
 You can clone this repository.
 
 ```bash
-git clone https://github.com/johanmed/gsurgeon.git
+git clone https://github.com/johanmed/pinpoint.git
 ```
 
 #### 2. Install dependencies
@@ -93,7 +93,7 @@ This is a fallback in case you experience challenges getting started with poetry
 
 #### 3. Set tool parameters
 
-**GSurgeon** expects a number of parameters to be defined for the surgery:
+**Pinpoint** expects a number of parameters to be defined for the surgery:
 
 - N_ITERATIONS: number of operations
 - MODEL_NAME: DSPy model identifier
@@ -102,7 +102,7 @@ This is a fallback in case you experience challenges getting started with poetry
 
 We recommend creating them in an environment file. For more details, see file `env_example`.
 
-#### 4. Add gsurgeon path to your search path
+#### 4. Add pinpoint path to your search path
 
 ```bash
 export PATH="$PATH:/path/to/project"
@@ -113,16 +113,16 @@ Replace the path above by yours. You can also add it to your file `~/.bashrc`.
 #### 5. Run your query
 
 ```bash
-gsurgeon --env-file env_example "Which genes on chromosome 1 of the mouse genome are related to inflammation and diabetes at the same time?"
+pinpoint --env-file env_example "Which genes on chromosome 1 of the mouse genome are related to inflammation and diabetes at the same time?"
 ```
 
 Replace the query above by yours.
 
-## Why use GSurgeon?
+## Why use Pinpoint?
 
 #### 1. Access to up-to-date biological information
 
-Accessing genomic information is a pain. It requires knowledge of right databases to query but also skills to dig deep and find relevant information. **GSurgeon** makes the process easier for the community by providing a simpler, yet powerful interface to interact in real time with biological databases.
+Accessing genomic information is a pain. It requires knowledge of right databases to query but also skills to dig deep and find relevant information. **Pinpoint** makes the process easier for the community by providing a simpler, yet powerful interface to interact in real time with biological databases.
 
 In the research ecosystem, this can be used for a variety of applications:
 
@@ -134,16 +134,16 @@ In the research ecosystem, this can be used for a variety of applications:
 
 #### 2. Prevent hallucination, trust a bit more language models used in biology
 
-Despite advances in language AI, hallucination remains a serious concern in biological research. **GSurgeon** offers a scalable solution by grounding generation in true information from biological databases. Current databases supported include:
+Despite advances in language AI, hallucination remains a serious concern in biological research. **Pinpoint** offers a scalable solution by grounding generation in true information from biological databases. Current databases supported include:
 - [GeneNetwork](https://genenetwork.org/): database service to explore biology of model organisms with bioinformatic tools
 - [NCBI](https://www.ncbi.nlm.nih.gov/): database service for access and analysis of biological information
 
 #### 3. Empower your LLM to handle with surgical precision the hard work for you with no limits
 
-**GSurgeon** exploits reasoning capabilities of LLM to orchestrate the search of biological information. Using its knowledge of biological databases, it finds dynamically the best approach of answering or completing the task you have in mind.
+**Pinpoint** exploits reasoning capabilities of LLM to orchestrate the search of biological information. Using its knowledge of biological databases, it finds dynamically the best approach of answering or completing the task you have in mind.
 
 The execution logic is abstracted to give full control to the agents. No need for extra coding!
 
 The tool footprint is lightweight. Most of the computational resources required to run the system are handled by the provider. No need to have monstruous specs to get started!
 
-**GSurgeon** can be executed on the command-line on any model, provided sufficient training.
+**Pinpoint** can be executed on the command-line on any model, provided sufficient training.

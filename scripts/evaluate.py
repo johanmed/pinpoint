@@ -1,5 +1,5 @@
 """
-Script to run gsurgeon and base LLM on query for comparison
+Script to run pinpoint and base LLM on query for comparison
 Author: Johannes Medagbe
 Copyright (c) 2026
 """
@@ -12,7 +12,7 @@ import os
 import dspy
 from Bio import Entrez
 from dotenv import load_dotenv
-from gsurgeon.operations.standard import evaluate
+from pinpoint.operations.standard import evaluate
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -1,5 +1,5 @@
 """
-Script to run gsurgeon once on query
+Script to run pinpoint once on query
 Author: Johannes Medagbe
 Copyright (c) 2026
 """
@@ -11,7 +11,7 @@ import os
 import dspy
 from Bio import Entrez
 from dotenv import load_dotenv
-from gsurgeon.operations.standard import operate
+from pinpoint.operations.standard import operate
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -1,4 +1,4 @@
-"""Modules with NCBI tools for GSurgeon"""
+"""Modules with NCBI tools for Pinpoint"""
 
 import json
 

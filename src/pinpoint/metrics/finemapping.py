@@ -2,7 +2,7 @@
 
 import dspy
 
-from gsurgeon.metrics.bootstrapping import bootstrap
+from pinpoint.metrics.bootstrapping import bootstrap
 
 
 class ExtractGene(dspy.Signature):

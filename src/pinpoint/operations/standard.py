@@ -1,15 +1,15 @@
-"""Module with standard operation constructs for GSurgeon"""
+"""Module with standard operation constructs for Pinpoint"""
 
 import asyncio
 
 import dspy
-from gsurgeon.procedures.standard import Reproduce, Resample
-from gsurgeon.surgeon.agent import GSurgeon
+from pinpoint.procedures.standard import Reproduce, Resample
+from pinpoint.surgeon.agent import Pinpoint
 
 
 async def operate(query: str, n_steps: int = 5) -> str:
-    """Execute operation or analysis with GSurgeon"""
-    surgeon = GSurgeon(max_steps=n_steps)
+    """Execute operation or analysis with Pinpoint"""
+    surgeon = Pinpoint(max_steps=n_steps)
     return await surgeon.handle(query)
 
 

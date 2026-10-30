@@ -1,5 +1,5 @@
 """
-Script to run gsurgeon with repetition on same query and get reproducible results
+Script to run pinpoint with repetition on same query and get reproducible results
 Author: Johannes Medagbe
 Copyright (c) 2026
 """
@@ -11,7 +11,7 @@ import os
 import dspy
 from Bio import Entrez
 from dotenv import load_dotenv
-from gsurgeon.operations.standard import reoperate
+from pinpoint.operations.standard import reoperate
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

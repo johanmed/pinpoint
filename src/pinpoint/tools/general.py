@@ -1,4 +1,4 @@
-"""Modules with general tools for GSurgeon"""
+"""Modules with general tools for Pinpoint"""
 
 import dspy
 

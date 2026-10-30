@@ -1,5 +1,5 @@
 """
-Script to run and bootstrap a genomic task with gsurgeon for metric estimation
+Script to run and bootstrap a genomic task with pinpoint for metric estimation
 Author: Johannes Medagbe
 Copyright (c) 2026
 """
@@ -12,9 +12,9 @@ import os
 import dspy
 from Bio import Entrez
 from dotenv import load_dotenv
-from gsurgeon.metrics.finemapping import bootstrap_rank as rank_genes
-from gsurgeon.metrics.network import bootstrap_weight as weigh_edges
-from gsurgeon.operations.standard import meta_analyze
+from pinpoint.metrics.finemapping import bootstrap_rank as rank_genes
+from pinpoint.metrics.network import bootstrap_weight as weigh_edges
+from pinpoint.operations.standard import meta_analyze
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

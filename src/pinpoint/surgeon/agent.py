@@ -1,4 +1,4 @@
-"""GSurgeon: Multi-agent system to dissect genomic information"""
+"""Pinpoint: Multi-agent system to dissect genomic information"""
 
 import asyncio
 import json
@@ -9,9 +9,9 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import dspy
-from gsurgeon.procedures.react import Consult, Research
-from gsurgeon.procedures.standard import Finalize, Plan, Supervise, Tune
-from gsurgeon.surgeon.prompts import (
+from pinpoint.procedures.react import Consult, Research
+from pinpoint.procedures.standard import Finalize, Plan, Supervise, Tune
+from pinpoint.surgeon.prompts import (
     expert_prompt,
     planner_prompt,
     reflector_prompt,
@@ -40,7 +40,7 @@ class AgentState(BaseModel):
 
 
 @dataclass
-class GSurgeon:
+class Pinpoint:
     """
     Represent Search Agent
     Input:
