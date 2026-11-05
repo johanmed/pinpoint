@@ -1,4 +1,5 @@
 <div align="center">
+	<img src="assets/banner.png" alt="Pinpoint banner" width="100%">
 	<h1>Looking inside genomes and phenomes</h1>
 </div>
 
