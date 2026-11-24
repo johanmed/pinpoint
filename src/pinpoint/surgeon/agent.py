@@ -64,7 +64,7 @@ class Pinpoint:
         else:
             input_text = state.messages[-1]  # use reflection insights
         input_text = [researcher_prompt] + [
-            HumanMessage(message) for message in input_text
+            HumanMessage(message.content) for message in input_text
         ]
         research = Research()
         result = await asyncio.to_thread(research, query=input_text)
@@ -80,7 +80,9 @@ class Pinpoint:
             input_text = [state.messages[1], state.messages[0]]  # use plan and query
         else:
             input_text = state.messages[-2]  # use reflection insights
-        input_text = [expert_prompt] + [HumanMessage(message) for message in input_text]
+        input_text = [expert_prompt] + [
+            HumanMessage(message.content) for message in input_text
+        ]
         consult = Consult()
         result = await asyncio.to_thread(consult, query=input_text)
         print("Expert produced answers")
@@ -96,7 +98,7 @@ class Pinpoint:
         else:
             input_text = state.messages[-2]
         input_text = [expert_prompt] + [
-            HumanMessage(message) for message in input_text
+            HumanMessage(message.content) for message in input_text
         ]  # share system prompt with expert
         identify = Identify()
         result = await asyncio.to_thread(identify, query=input_text)
