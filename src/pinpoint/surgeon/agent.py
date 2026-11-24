@@ -60,10 +60,10 @@ class Pinpoint:
         """Answer query with GeneNetwork information"""
         print("Calling the researcher...")
         if len(state.messages) < 3:  # handle first call to researcher
-            input_text = state.messages[0]  # use original query
+            input_text = [state.messages[1], state.messages[0]]  # use original query
         else:
             input_text = state.messages[-1]  # use reflection insights
-        input_text = [researcher_prompt, input_text.content]
+        input_text = [researcher_prompt] + [message for message in input_text]
         research = Research()
         result = await asyncio.to_thread(research, query=input_text)
         print("Researcher performed analysis")
@@ -75,10 +75,10 @@ class Pinpoint:
         """Answer query with NCBI information"""
         print("Calling the expert...")
         if len(state.messages) < 4:  # handle first call to expert
-            input_text = state.messages[1] + state.messages[0]  # use plan and query
+            input_text = [state.messages[1], state.messages[0]]  # use plan and query
         else:
             input_text = state.messages[-2]  # use reflection insights
-        input_text = [expert_prompt, input_text]
+        input_text = [expert_prompt] + [message for message in input_text]
         consult = Consult()
         result = await asyncio.to_thread(consult, query=input_text)
         print("Expert produced answers")
@@ -90,10 +90,12 @@ class Pinpoint:
         """Answer query with CellxGene annotations"""
         print("Calling the cell identifier...")
         if len(state.messages) < 4:
-            input_text = state.messages[1] + state.messages[0]
+            input_text = [state.messages[1], state.messages[0]]
         else:
             input_text = state.messages[-2]
-        input_text = [expert_prompt, input_text]  # share system prompt with expert
+        input_text = [expert_prompt] + [
+            message for message in input_text
+        ]  # share system prompt with expert
         identify = Identify()
         result = await asyncio.to_thread(identify, query=input_text)
         print("Cell identifier inferred types")
