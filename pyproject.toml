@@ -1,13 +1,13 @@
 [project]
 name = "pinpoint"
-version = "1.0.0"
+version = "1.1.0"
 description = "A tool to dissect biology of model organisms using genomic information"
 authors = [
     {name = "Johannes Medagbe",email = "johanmedagbe@gmail.com"}
 ]
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.11,<3.15"
+requires-python = ">=3.12,<3.15"
 dependencies = [
     "langchain-core (>=1.4.0,<2.0.0)",
     "langgraph (>=1.2.0,<2.0.0)",
@@ -19,6 +19,12 @@ dependencies = [
     "dspy (>=3.2.1,<4.0.0)",
     "botocore (>=1.43.11,<2.0.0)",
     "sparqlwrapper (>=2.0.0,<3.0.0)",
+    "anndata (>=0.13.4,<0.14.0)",
+    "cellxgene-census[experimental] (>=1.18.0,<2.0.0)",
+    "numpy (>=2.5.5,<3.0.0)",
+    "pandas (>=3.1.1,<4.0.0)",
+    "scipy (>=1.18.1,<2.0.0)",
+    "scvi (>=0.6.8,<0.7.0)",
 ]
 
 [project.urls]
