@@ -1,13 +1,14 @@
 """Module with ReAct procedures (dspy programs) for Pinpoint"""
 
+from typing import Union
+
 import dspy
 from langchain_core.messages import BaseMessage
 from pinpoint.tools.cellxgene import predict_cell_types
 from pinpoint.tools.general import checker, reformulator, splitter
 from pinpoint.tools.gn import make_sparql_tool
-from pinpoint.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
-
-from typing import Union
+from pinpoint.tools.ncbi import (ncbi_searcher, record_fetcher,
+                                 record_synthesizer)
 
 
 class ReactSig(dspy.Signature):

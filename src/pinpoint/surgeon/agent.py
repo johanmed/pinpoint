@@ -64,7 +64,12 @@ class Pinpoint:
         else:
             input_text = state.messages[-1]  # use reflection insights
         input_text = [researcher_prompt] + [
-            HumanMessage(message.content) for message in input_text
+            (
+                HumanMessage(message.content)
+                if hasattr(message, "content")
+                else HumanMessage(message)
+            )
+            for message in input_text
         ]
         research = Research()
         result = await asyncio.to_thread(research, query=input_text)
@@ -81,7 +86,12 @@ class Pinpoint:
         else:
             input_text = state.messages[-2]  # use reflection insights
         input_text = [expert_prompt] + [
-            HumanMessage(message.content) for message in input_text
+            (
+                HumanMessage(message.content)
+                if hasattr(message, "content")
+                else HumanMessage(message)
+            )
+            for message in input_text
         ]
         consult = Consult()
         result = await asyncio.to_thread(consult, query=input_text)
@@ -98,7 +108,12 @@ class Pinpoint:
         else:
             input_text = state.messages[-2]
         input_text = [expert_prompt] + [
-            HumanMessage(message.content) for message in input_text
+            (
+                HumanMessage(message.content)
+                if hasattr(message, "content")
+                else HumanMessage(message)
+            )
+            for message in input_text
         ]  # share system prompt with expert
         reformat = dspy.Predict(Format)
         final_query = await asyncio.to_thread(reformat, messages=input_text)
