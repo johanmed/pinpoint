@@ -112,5 +112,5 @@ class Identify(dspy.Module):
         ]
         self.react = dspy.ReAct(signature=CellSig, tools=self.tools, max_iters=20)
 
-    def forward(self, query: list[BaseMessage]):
+    def forward(self, expression_profile: str, organ: str):
         return self.react(expression_profile=expression_profile, organ=organ)
