@@ -16,7 +16,13 @@ from pinpoint.operations.standard import reoperate
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--env-file", default=".env", help="Path to .env file")
-    parser.add_argument("query", help="Question to answer")
+    parser.add_argument(
+        "--input-path",
+        help="Path to file with detailed instructions on the task to perform",
+    )
+    parser.add_argument(
+        "--output-path", help="Path to output file with metrics estimated"
+    )
     args = parser.parse_args()
 
     load_dotenv(dotenv_path=args.env_file)
@@ -54,4 +60,9 @@ if __name__ == "__main__":
         raise ValueError("Set N_ITERATIONS for multiple runs")
     n_iterations = int(N_ITERATIONS)
 
-    print(asyncio.run(reoperate(args.query, n_steps, n_iterations)))
+    with open(args.input_path) as i:
+        instruction = i.read().strip()
+    results = asyncio.run(reoperate(instruction, n_steps, n_iterations))
+    print("Inference complete")
+    with open(args.output_path, "w") as o:
+        o.write(json.dumps(results, indent=4))

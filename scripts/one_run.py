@@ -16,7 +16,11 @@ from pinpoint.operations.standard import operate
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--env-file", default=".env", help="Path to .env file")
-    parser.add_argument("query", help="Question to answer")
+    parser.add_argument(
+        "--input-path",
+        help="Path to file with detailed instructions on the task to perform",
+    )
+    parser.add_argument("--output-path", help="Path to output file with results")
     args = parser.parse_args()
 
     load_dotenv(dotenv_path=args.env_file)
@@ -48,4 +52,9 @@ if __name__ == "__main__":
         raise ValueError("Set N_STEPS for operation")
     n_steps = int(N_STEPS)
 
-    print(asyncio.run(operate(args.query, n_steps)))
+    with open(args.input_path) as i:
+        instruction = i.read().strip()
+    results = asyncio.run(operate(instruction, n_steps))
+    print("Inference complete")
+    with open(args.output_path, "w") as o:
+        o.write(json.dumps(results, indent=4))

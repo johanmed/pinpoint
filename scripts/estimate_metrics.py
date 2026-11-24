@@ -21,7 +21,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--task", help="Type of genomic task to perform i.e finemapping or network"
     )
-    parser.add_argument("--input-path", help="Path to file with detailed instructions")
+    parser.add_argument(
+        "--input-path",
+        help="Path to file with detailed instructions on the task to perform",
+    )
     parser.add_argument(
         "--output-path", help="Path to output file with metrics estimated"
     )
