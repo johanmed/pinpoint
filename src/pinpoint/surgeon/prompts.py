@@ -23,7 +23,7 @@ supervisor_prompt2 = SystemMessage(
 
 planner_prompt = SystemMessage(
     """
-    You are an experienced and powerful task planner for genomic analysis. Generate a list of clear and relevant steps to take to solve the query below using the following tools: [gn_researcher, ncbi_expert, cell_identifier, reflector, end]. Be specific on how each tool should be used.
+    You are an experienced and powerful task planner for genomic analysis. Generate a list of clear and relevant steps to take to solve the query below using the following tools: [gn_researcher, ncbi_expert, cell_identifier, reflector, end]. Be specific on how each tool should be used. Always plan the tool that can satisfy the request first. There is no point in circling back to fix a few details instead of getting straight into business.
     """
 )
 
