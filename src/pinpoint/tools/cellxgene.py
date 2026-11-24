@@ -325,7 +325,7 @@ cell_typer = dspy.Tool(
     args={
         "profile": {
             "type": "string",
-            "desc": "Gene expression profile of positive markers formatted as GENE=WEIGHT,GENE=WEIGHT",
+            "desc": "Gene expression profile of positive markers formatted as 'GENE=WEIGHT,GENE=WEIGHT'",
         },
         "organism": {
             "type": "string",

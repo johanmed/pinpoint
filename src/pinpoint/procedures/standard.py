@@ -97,3 +97,15 @@ class Resample(dspy.Signature):
 
     query: str = dspy.InputField()
     reformulation: str = dspy.OutputField(desc="Reformulated query")
+
+
+class Format(dspy.Signature):
+    """
+    Extract gene and corresponding expression value from the prompt history and format it as 'GENE1=WEIGHT,GENE2=WEIGHT,etc'.
+    The output must be a valid comma-separate string of gene and corresponding expression value.
+    """
+
+    messages: list[BaseMessage] = dspy.InputField()
+    expression_profile: str = dspy.OutputField(
+        desc="Gene and expression value formatted as 'GENE1=WEIGHT,GENE2=WEIGHT'"
+    )

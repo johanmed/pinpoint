@@ -14,7 +14,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from pinpoint.procedures.react import Consult, Identify, Research
-from pinpoint.procedures.standard import Finalize, Plan, Supervise, Tune
+from pinpoint.procedures.standard import Finalize, Plan, Supervise, Tune, Format
 from pinpoint.surgeon.prompts import (
     expert_prompt,
     planner_prompt,
@@ -100,8 +100,12 @@ class Pinpoint:
         input_text = [expert_prompt] + [
             HumanMessage(message.content) for message in input_text
         ]  # share system prompt with expert
+        reformat = dspy.Predict(Format)
+        final_query = await asyncio.to_thread(reformat, input_text)
         identify = Identify()
-        result = await asyncio.to_thread(identify, query=input_text)
+        result = await asyncio.to_thread(
+            identify, query=final_query.get("expression_profile")
+        )
         print("Cell identifier inferred types")
         return {
             "messages": [AIMessage(result.get("solution"))],
