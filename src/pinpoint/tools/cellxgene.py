@@ -364,7 +364,7 @@ cell_typer = dspy.Tool(
         },
         "organ": {
             "type": "string",
-            "desc": "Organ of interest matching Census tissue_general vocabulary (e.g. 'brain', 'prostate', 'heart'), empty string for a global vote across all organs",
+            "desc": "Organ of interest to be inferred from relevant field. If not available, use empty string for a global vote across all organs",
         },
     },
     func=predict_cell_types,
