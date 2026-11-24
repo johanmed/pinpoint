@@ -25,6 +25,7 @@ dependencies = [
     "pandas (>=3.1.1,<4.0.0)",
     "scipy (>=1.18.1,<2.0.0)",
     "scvi (>=0.6.8,<0.7.0)",
+    "litellm (>=1.110.3,<2.0.0)",
 ]
 
 [project.urls]
