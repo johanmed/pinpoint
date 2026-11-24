@@ -316,7 +316,7 @@ def predict_cell_types(
             ["cell_type", "tissue_general"],
             experiment=census["census_data"][organism],
         )
-    return json.dumps(final.to_dict())
+    return json.dumps(predictions.to_dict())
 
 
 cell_typer = dspy.Tool(
