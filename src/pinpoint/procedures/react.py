@@ -1,18 +1,25 @@
 """Module with ReAct procedures (dspy programs) for Pinpoint"""
 
-from typing import Union
-
 import dspy
 from langchain_core.messages import BaseMessage
+
 from pinpoint.tools.cellxgene import predict_cell_types
 from pinpoint.tools.general import checker, reformulator, splitter
 from pinpoint.tools.gn import make_sparql_tool
-from pinpoint.tools.ncbi import (ncbi_searcher, record_fetcher,
-                                 record_synthesizer)
+from pinpoint.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
 
 
-class ReactSig(dspy.Signature):
-    query: list[BaseMessage] | str = dspy.InputField()
+class GeneralSig(dspy.Signature):
+    query: list[BaseMessage] = dspy.InputField()
+    reasoning: str = dspy.OutputField(desc="Concise explanation of solution")
+    solution: str = dspy.OutputField(
+        desc="Final answer to the query in 2000 words max making use of all relevant information in accumulated context."
+    )
+
+
+class CellSig(dspy.Signature):
+    expression_profile: str = dspy.InputField()
+    organ: str = dspy.InputField()
     reasoning: str = dspy.OutputField(desc="Concise explanation of solution")
     solution: str = dspy.OutputField(
         desc="Final answer to the query in 2000 words max making use of all relevant information in accumulated context."
@@ -38,7 +45,7 @@ class Research(dspy.Module):
         self.tools = [splitter, checker, reformulator, fetcher]
 
         self.react = dspy.ReAct(
-            signature=ReactSig,
+            signature=GeneralSig,
             tools=self.tools,
             max_iters=10,  # maximum number of steps for reasoning and tool calling
         )
@@ -77,7 +84,7 @@ class Consult(dspy.Module):
         ]
 
         self.react = dspy.ReAct(
-            signature=ReactSig,
+            signature=GeneralSig,
             tools=self.tools,
             max_iters=20,
         )
@@ -103,7 +110,7 @@ class Identify(dspy.Module):
             record_fetcher,
             record_synthesizer,
         ]
-        self.react = dspy.ReAct(signature=ReactSig, tools=self.tools, max_iters=20)
+        self.react = dspy.ReAct(signature=CellSig, tools=self.tools, max_iters=20)
 
     def forward(self, query: list[BaseMessage]):
         return self.react(query=query)

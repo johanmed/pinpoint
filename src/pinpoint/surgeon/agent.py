@@ -13,6 +13,9 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, System
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
+from pydantic import BaseModel
+from typing_extensions import Annotated, Literal
+
 from pinpoint.procedures.react import Consult, Identify, Research
 from pinpoint.procedures.standard import Finalize, Format, Plan, Supervise, Tune
 from pinpoint.surgeon.prompts import (
@@ -23,8 +26,6 @@ from pinpoint.surgeon.prompts import (
     supervisor_prompt1,
     supervisor_prompt2,
 )
-from pydantic import BaseModel
-from typing_extensions import Annotated, Literal
 
 
 class AgentState(BaseModel):
@@ -116,11 +117,17 @@ class Pinpoint:
             )
             for message in input_text
         ]  # share system prompt with expert
+
         reformat = dspy.Predict(Format)
         final_query = await asyncio.to_thread(reformat, messages=input_text)
+        expression_profile = final_query.get("expression_profile")
+        organ = final_query.get("organ")
+
         identify = Identify()
         result = await asyncio.to_thread(
-            identify, query=final_query.get("expression_profile")
+            identify,
+            expression_profile=expression_profile,
+            organ=organ,
         )
         print("Cell identifier inferred types")
         return {
