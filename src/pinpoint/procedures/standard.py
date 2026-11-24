@@ -43,9 +43,9 @@ class Supervise(dspy.Signature):
     """
 
     background: list[BaseMessage] = dspy.InputField()
-    next_decision: Literal["gn_researcher", "ncbi_expert", "reflector", "end"] = (
-        dspy.OutputField(desc="The next step to take based on instructions")
-    )
+    next_decision: Literal[
+        "gn_researcher", "ncbi_expert", "cell_identifier", "reflector", "end"
+    ] = dspy.OutputField(desc="The next step to take based on instructions")
     reasoning: str = dspy.OutputField(
         desc="Concise explanation of the decision in 50 words"
     )
