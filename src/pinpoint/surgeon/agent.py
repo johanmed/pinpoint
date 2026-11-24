@@ -14,7 +14,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from pinpoint.procedures.react import Consult, Identify, Research
-from pinpoint.procedures.standard import Finalize, Plan, Supervise, Tune, Format
+from pinpoint.procedures.standard import Finalize, Format, Plan, Supervise, Tune
 from pinpoint.surgeon.prompts import (
     expert_prompt,
     planner_prompt,
@@ -62,12 +62,12 @@ class Pinpoint:
         if len(state.messages) < 3:  # handle first call to researcher
             input_text = [state.messages[1], state.messages[0]]  # use original query
         else:
-            input_text = state.messages[-1]  # use reflection insights
+            input_text = [state.messages[-1]]  # use reflection insights
         input_text = [researcher_prompt] + [
             (
                 HumanMessage(message.content)
-                if hasattr(message, "content")
-                else HumanMessage(message)
+                if isinstance(message, BaseMessage)
+                else HumanMessage(str(message))
             )
             for message in input_text
         ]
@@ -84,12 +84,13 @@ class Pinpoint:
         if len(state.messages) < 4:  # handle first call to expert
             input_text = [state.messages[1], state.messages[0]]  # use plan and query
         else:
-            input_text = state.messages[-2]  # use reflection insights
+            input_text = [state.messages[-2]]  # use reflection insights
+        print(input_text)
         input_text = [expert_prompt] + [
             (
                 HumanMessage(message.content)
-                if hasattr(message, "content")
-                else HumanMessage(message)
+                if isinstance(message, BaseMessage)
+                else HumanMessage(str(message))
             )
             for message in input_text
         ]
@@ -106,12 +107,12 @@ class Pinpoint:
         if len(state.messages) < 4:
             input_text = [state.messages[1], state.messages[0]]
         else:
-            input_text = state.messages[-2]
+            input_text = [state.messages[-2]]
         input_text = [expert_prompt] + [
             (
                 HumanMessage(message.content)
-                if hasattr(message, "content")
-                else HumanMessage(message)
+                if isinstance(message, BaseMessage)
+                else HumanMessage(str(message))
             )
             for message in input_text
         ]  # share system prompt with expert
