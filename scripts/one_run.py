@@ -56,6 +56,5 @@ if __name__ == "__main__":
     with open(args.input_path) as i:
         instruction = i.read().strip()
     results = asyncio.run(operate(instruction, n_steps))
-    print("Inference complete")
     with open(args.output_path, "w") as o:
         o.write(json.dumps(results, indent=4))
