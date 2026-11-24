@@ -6,6 +6,7 @@ Copyright (c) 2026
 
 import argparse
 import asyncio
+import json
 import os
 
 import dspy
