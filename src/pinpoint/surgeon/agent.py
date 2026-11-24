@@ -101,7 +101,7 @@ class Pinpoint:
             HumanMessage(message.content) for message in input_text
         ]  # share system prompt with expert
         reformat = dspy.Predict(Format)
-        final_query = await asyncio.to_thread(reformat, input_text)
+        final_query = await asyncio.to_thread(reformat, messages=input_text)
         identify = Identify()
         result = await asyncio.to_thread(
             identify, query=final_query.get("expression_profile")

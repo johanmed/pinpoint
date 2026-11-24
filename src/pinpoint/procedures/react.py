@@ -7,9 +7,11 @@ from pinpoint.tools.general import checker, reformulator, splitter
 from pinpoint.tools.gn import make_sparql_tool
 from pinpoint.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
 
+from typing import Union
+
 
 class ReactSig(dspy.Signature):
-    query: list[BaseMessage] = dspy.InputField()
+    query: list[BaseMessage] | str = dspy.InputField()
     reasoning: str = dspy.OutputField(desc="Concise explanation of solution")
     solution: str = dspy.OutputField(
         desc="Final answer to the query in 2000 words max making use of all relevant information in accumulated context."
