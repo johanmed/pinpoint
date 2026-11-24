@@ -16,14 +16,15 @@ import scvi
 
 EMBEDDING_NAME = "scvi"
 CENSUS_VERSION = "2025-01-30"
-K = 5
-NPROBE = 10
+K = 30
+NPROBE = 20
 MEMORY_GiB = 2
 
 
 def predict_cell_types(
     profile: str,
     organism: str,
+    organ: str,
 ) -> str:
     """Plurality-vote cell type prediction per query cell, with confidence scores."""
 
@@ -251,6 +252,44 @@ def predict_cell_types(
         adata.obsm[EMBEDDING_NAME] = vae.get_latent_representation()
         return adata
 
+    def vote_cell_types(
+        census: Any,
+        organism: str,
+        neighbors: Any,
+        organ: str | None,
+    ) -> str:
+        """Plurality-vote cell types over the k neighbors, restricted to one organ.
+        Falls back to the global vote when the organ contributes no neighbors.
+        Returns the winner plus the full vote distribution for downstream callers.
+        """
+        joinids = sorted(
+            {int(i) for i in np.asarray(neighbors.neighbor_ids).reshape(-1)}
+        )
+        obs = cellxgene_census.get_obs(
+            census,
+            organism,
+            coords=joinids,
+            column_names=["soma_joinid", "cell_type", "tissue_general"],
+        ).set_index("soma_joinid")
+
+        organ_obs = obs[obs["tissue_general"] == organ] if organ else obs
+        if organ_obs.empty:
+            print(
+                f"NOTE: no neighbors from organ {organ!r}, falling back to global vote"
+            )
+            organ_obs = obs
+
+        counts = organ_obs["cell_type"].value_counts()
+        return json.dumps(
+            {
+                "organ": organ,
+                "cell_type": counts.index[0],
+                "confidence": round(float(counts.iloc[0] / counts.sum()), 3),
+                "n_neighbors": int(counts.sum()),
+                "votes": {cell_type: int(votes) for cell_type, votes in counts.items()},
+            }
+        )
+
     def find_neighbors(
         query: ad.AnnData,
         organism: str,
@@ -309,14 +348,7 @@ def predict_cell_types(
             CENSUS_VERSION,
             embedding_metadata,
         )
-        predictions = cellxgene_census.experimental.predict_obs_metadata(
-            organism,
-            CENSUS_VERSION,
-            neighbors,
-            ["cell_type", "tissue_general"],
-            experiment=census["census_data"][organism],
-        )
-    return json.dumps(predictions.to_dict())
+    return vote_cell_types(census, organism, neighbors, organ)
 
 
 cell_typer = dspy.Tool(
@@ -330,6 +362,10 @@ cell_typer = dspy.Tool(
         "organism": {
             "type": "string",
             "desc": "Most appropriate organism to search for similar gene expression profile in based on the source profile, must be either 'homo_sapiens' or 'mus_musculus'",
+        },
+        "organ": {
+            "type": "string",
+            "desc": "Organ of interest matching Census tissue_general vocabulary (e.g. 'brain', 'prostate', 'heart'), empty string for a global vote across all organs",
         },
     },
     func=predict_cell_types,
