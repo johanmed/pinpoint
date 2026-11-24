@@ -14,7 +14,6 @@ import pandas as pd
 import scipy.sparse as sp
 import scvi
 
-
 EMBEDDING_NAME = "scvi"
 CENSUS_VERSION = "2025-01-30"
 K = 5
@@ -92,13 +91,21 @@ def predict_cell_types(
         model_dir: Path = Path.home() / ".cache" / f"census-{EMBEDDING_NAME}",
     ) -> Path:
         """Return the local scVI model directory, downloading the model if needed."""
+
+        def s3_to_https(link: str, region: str = "us-west-2") -> str:
+            """Translate an s3:// URI into a virtual-hosted-style https URL; pass through others."""
+            if not link.startswith("s3://"):
+                return link
+            bucket, _, key = link[len("s3://") :].partition("/")
+            return f"https://{bucket}.s3.{region}.amazonaws.com/{key}"
+
         organism_dir = model_dir / organism / census_version
         model_path = organism_dir / "model.pt"
         if model_path.exists():
             print(f"Using cached scVI model at {model_path}")
             return organism_dir
 
-        link = embedding_metadata.get("model_link")
+        link = s3_to_https(embedding_metadata.get("model_link"))
         if not link:
             raise ValueError(
                 f"No scVI model is published for census version {census_version!r}, "
