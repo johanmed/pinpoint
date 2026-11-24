@@ -1,10 +1,11 @@
 """Module with ReAct procedures (dspy programs) for Pinpoint"""
 
 import dspy
+from langchain_core.messages import BaseMessage
+from pinpoint.tools.cellxgene import predict_cell_types
 from pinpoint.tools.general import checker, reformulator, splitter
 from pinpoint.tools.gn import make_sparql_tool
 from pinpoint.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
-from langchain_core.messages import BaseMessage
 
 
 class ReactSig(dspy.Signature):
@@ -46,7 +47,7 @@ class Research(dspy.Module):
 class Consult(dspy.Module):
     """
     Address a query or plan to completion using NCBI resources only.
-    For effficiency, only call a tool when it is strictly necessary in completing the next task.
+    For efficiency, only call a tool when it is strictly necessary in completing the next task.
     Use splitter when input query is too complex to be handled in a single step.
     Harness the reformulator to clarify a request when it seems ambiguous.
     Extract answers from NCBI by performing first a search with ncbi_searcher. The search terms must be as specific as possible.
@@ -77,6 +78,29 @@ class Consult(dspy.Module):
             tools=self.tools,
             max_iters=20,
         )
+
+    def forward(self, query: list[BaseMessage]):
+        return self.react(query=query)
+
+
+class Identify(dspy.Module):
+    """
+    Identify cell types based on a specific given profile of gene expression using CellxGene and NCBI tools.
+    Only call a tool when it is strictly necessary in completing the task.
+    As a rule of thumb, always identify the cell types based on the gene expression profile first.
+    Once identified, perform exhaustive search using the genes and the cell types to verify the results.
+    You must ascertain that all informations in the final answer are true at all cost.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.tools = [
+            predict_cell_types,
+            ncbi_searcher,
+            record_fetcher,
+            record_synthesizer,
+        ]
+        self.react = dspy.ReAct(signature=ReactSig, tools=self.tools, max_iters=20)
 
     def forward(self, query: list[BaseMessage]):
         return self.react(query=query)

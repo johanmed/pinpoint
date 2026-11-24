@@ -9,7 +9,11 @@ from dataclasses import dataclass, field
 from typing import Any
 
 import dspy
-from pinpoint.procedures.react import Consult, Research
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+from pinpoint.procedures.react import Consult, Identify, Research
 from pinpoint.procedures.standard import Finalize, Plan, Supervise, Tune
 from pinpoint.surgeon.prompts import (
     expert_prompt,
@@ -19,10 +23,6 @@ from pinpoint.surgeon.prompts import (
     supervisor_prompt1,
     supervisor_prompt2,
 )
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
-from langgraph.graph import END, START, StateGraph
-from langgraph.graph.message import add_messages
-from langgraph.prebuilt import ToolNode, tools_condition
 from pydantic import BaseModel
 from typing_extensions import Annotated, Literal
 
@@ -35,7 +35,7 @@ class AgentState(BaseModel):
 
     messages: Annotated[list[BaseMessage], add_messages]
     next_decision: Literal[
-        "gn_researcher", "planner", "reflector", "ncbi_expert", "end"
+        "gn_researcher", "planner", "reflector", "ncbi_expert", "cell_identifier", "end"
     ]
 
 
@@ -82,6 +82,21 @@ class Pinpoint:
         consult = Consult()
         result = await asyncio.to_thread(consult, query=input_text)
         print("Expert produced answers")
+        return {
+            "messages": [AIMessage(result.get("solution"))],
+        }
+
+    async def _cell_identifier(self, state: AgentState) -> dict:
+        """Answer query with CellxGene annotations"""
+        print("Calling the cell identifier...")
+        if len(state.messages) < 4:
+            input_text = state.messages[1] + state.messages[0]
+        else:
+            input_text = state.messages[-2]
+        input_text = [expert_prompt, input_text]  # share system prompt with expert
+        identify = Identify()
+        result = await asyncio.to_thread(identify, query=input_text)
+        print("Cell identifier inferred types")
         return {
             "messages": [AIMessage(result.get("solution"))],
         }
@@ -139,10 +154,12 @@ class Pinpoint:
         graph_builder.add_node("reflector", self._reflector)
         graph_builder.add_node("supervisor", self._supervisor)
         graph_builder.add_node("ncbi_expert", self._expert)
+        graph_builder.add_node("cell_identifier", self._cell_identifier)
         graph_builder.add_edge(START, "planner")
         graph_builder.add_edge("planner", "supervisor")
         graph_builder.add_edge("gn_researcher", "supervisor")
         graph_builder.add_edge("ncbi_expert", "supervisor")
+        graph_builder.add_edge("cell_identifier", "supervisor")
         graph_builder.add_edge("reflector", "supervisor")
         graph_builder.add_conditional_edges(
             "supervisor",
@@ -151,6 +168,7 @@ class Pinpoint:
                 "reflector": "reflector",
                 "gn_researcher": "gn_researcher",
                 "ncbi_expert": "ncbi_expert",
+                "cell_identifier": "cell_identifier",
                 "end": END,
             },
         )
