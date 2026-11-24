@@ -103,6 +103,7 @@ class Format(dspy.Signature):
     """
     Extract gene and corresponding expression value from the prompt history and format it as 'GENE1=WEIGHT,GENE2=WEIGHT,etc'.
     The output must be a valid comma-separate string of gene and corresponding expression value.
+    Do not leave any gene in the prompt out.
     """
 
     messages: list[BaseMessage] = dspy.InputField()

@@ -26,7 +26,6 @@ def predict_cell_types(
     organism: str,
     organ: str,
 ) -> str:
-    """Plurality-vote cell type prediction per query cell, with confidence scores."""
 
     def parse_profile(profile_spec: str) -> dict[str, float]:
         """Parse 'GENE=WEIGHT,GENE=WEIGHT' pairs."""
