@@ -101,8 +101,9 @@ class Resample(dspy.Signature):
 
 class Format(dspy.Signature):
     """
-    Extract gene and corresponding expression value from the message history and format it as 'GENE1=WEIGHT,GENE2=WEIGHT,etc'.
-    The output must be a valid comma-separate string of gene and corresponding expression value.
+    Extract gene and corresponding mean count from the message history and format it as 'GENE1=WEIGHT,GENE2=WEIGHT,etc'.
+    The expression profile must be a valid comma-separate string of gene and corresponding mean count.
+    Do not take the log2 fold change instead of the mean count.
     Do not leave any gene in the prompt out in the expression profile at all cost.
     In parallel, identify the organ where the samples were collected for scRNA and the total number of reads per cell.
     These informations should all be in the messages.
@@ -110,7 +111,7 @@ class Format(dspy.Signature):
 
     messages: list[BaseMessage] = dspy.InputField()
     expression_profile: str = dspy.OutputField(
-        desc="Gene and expression value formatted as 'GENE1=WEIGHT,GENE2=WEIGHT'"
+        desc="Gene and mean count formatted as 'GENE1=WEIGHT,GENE2=WEIGHT'"
     )
     total_count = int = dspy.OutputField(
         desc="Total number of reads per cell in the message (it cannot be 0)"
