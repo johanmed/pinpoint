@@ -1,4 +1,4 @@
-"""Module with CellxGene tools for Pinpoint"""
+"""Module with scvi-based CellxGene tools for Pinpoint"""
 
 import json
 import urllib.request
@@ -169,7 +169,7 @@ def predict_cell_types(
         symbol_map: dict[str, str],
     ) -> ad.AnnData:
         """Build a pseudo-cell AnnData from a {gene symbol: weight} profile.
-        Counts are expected to already be normalized and indexed by Ensembl ID
+        Counts are normalized, converted back to integers and indexed by Ensembl ID
         as the scVI model expects. Negative weights cannot be expressed as counts
         and are clipped with a warning.
         """
@@ -351,9 +351,9 @@ def predict_cell_types(
     return vote_cell_types(census, organism, neighbors, organ)
 
 
-cell_typer = dspy.Tool(
-    name="cell_typer",
-    desc="Identify cell types based on gene expression profile of positive markers",
+cell_typer_scvi = dspy.Tool(
+    name="cell_typer_scvi",
+    desc="Identify cell types based on gene expression profile of positive markers using scvi model",
     args={
         "profile": {
             "type": "string",
