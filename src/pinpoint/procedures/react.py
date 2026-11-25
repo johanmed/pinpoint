@@ -4,7 +4,6 @@ import dspy
 from langchain_core.messages import BaseMessage
 
 from pinpoint.tools.scvi import cell_typer_scvi
-from pinpoint.tools.uce import cell_typer_uce
 from pinpoint.tools.general import checker, reformulator, splitter
 from pinpoint.tools.gn import make_sparql_tool
 from pinpoint.tools.ncbi import ncbi_searcher, record_fetcher, record_synthesizer
@@ -100,7 +99,6 @@ class Identify(dspy.Module):
     Identify cell types based on a specific given profile of gene expression using CellxGene and NCBI tools.
     Only call a tool when it is strictly necessary in completing the task.
     As a rule of thumb, always identify the cell types based on the gene expression profile first.
-    Try scvi model before UCE because it is computationally less heavy. Only move to UCE when scvi predict abnormal cell types.
     Once the cell type identified, perform exhaustive search using the genes and the cell types to verify the results.
     You must ascertain that all informations in the final answer are true at all cost.
     """
@@ -109,7 +107,6 @@ class Identify(dspy.Module):
         super().__init__()
         self.tools = [
             cell_typer_scvi,
-            cell_typer_uce,
             ncbi_searcher,
             record_fetcher,
             record_synthesizer,

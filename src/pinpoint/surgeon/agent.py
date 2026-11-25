@@ -121,7 +121,7 @@ class Pinpoint:
         reformat = dspy.Predict(Format)
         final_query = await asyncio.to_thread(reformat, messages=input_text)
         expression_profile = final_query.get("expression_profile")
-        total_count = final_query.get("total_count")
+        total_count = int(final_query.get("total_count"))
         organ = final_query.get("organ")
 
         identify = Identify()
