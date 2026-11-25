@@ -19,6 +19,7 @@ class GeneralSig(dspy.Signature):
 
 class CellSig(dspy.Signature):
     expression_profile: str = dspy.InputField()
+    total_count: int = dspy.InputField()
     organ: str = dspy.InputField()
     reasoning: str = dspy.OutputField(desc="Concise explanation of solution")
     solution: str = dspy.OutputField(
@@ -112,5 +113,5 @@ class Identify(dspy.Module):
         ]
         self.react = dspy.ReAct(signature=CellSig, tools=self.tools, max_iters=20)
 
-    def forward(self, expression_profile: str, organ: str):
-        return self.react(expression_profile=expression_profile, organ=organ)
+    def forward(self, expression_profile: str, total_count: int, organ: str):
+        return self.react(expression_profile=expression_profile, total_count=total_count, organ=organ)

@@ -104,12 +104,15 @@ class Format(dspy.Signature):
     Extract gene and corresponding expression value from the prompt history and format it as 'GENE1=WEIGHT,GENE2=WEIGHT,etc'.
     The output must be a valid comma-separate string of gene and corresponding expression value.
     Do not leave any gene in the prompt out in the expression profile at all cost.
-    In parallel, identify the organ where the samples were collected for scRNA.
+    In parallel, identify the organ where the samples were collected for scRNA and the total number of reads per cell.
     """
 
     messages: list[BaseMessage] = dspy.InputField()
     expression_profile: str = dspy.OutputField(
         desc="Gene and expression value formatted as 'GENE1=WEIGHT,GENE2=WEIGHT'"
+    )
+    total_count = int = dspy.OutputField(
+        desc="Total number of reads per cell in the prompt"
     )
     organ: str = dspy.OutputField(
         desc="Organ of interest extracted from the prompt i.e brain"

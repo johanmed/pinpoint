@@ -25,6 +25,7 @@ def predict_cell_types(
     profile: str,
     organism: str,
     organ: str,
+    total_count: int,
 ) -> str:
 
     def parse_profile(profile_spec: str) -> dict[str, float]:
@@ -209,7 +210,7 @@ def predict_cell_types(
                 "NOTE: multiple profile genes map to the same Ensembl ID, weights pooled"
             )
 
-        counts = np.round(positive / positive.sum()).astype(np.float32)
+        counts = np.round(total_count * positive / positive.sum()).astype(np.float32)
         var = pd.DataFrame(
             {"feature_id": gene_ids},
             index=pd.Index(gene_ids, name="feature_id"),
@@ -365,6 +366,11 @@ cell_typer = dspy.Tool(
         "organ": {
             "type": "string",
             "desc": "Organ of interest to be inferred from relevant field. If not available, use empty string for a global vote across all organs",
+        },
+        "total_count": {
+            "type": "integer",
+            "desc": "Total number of reads per cell to be inferred from relevant field",
+            "default": 20000,
         },
     },
     func=predict_cell_types,
